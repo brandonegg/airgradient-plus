@@ -112,7 +112,7 @@ float temp = 0;
 int hum = 0;
 
 int buttonConfig = 4;
-int lastState = LOW;
+int lastState = HIGH;
 int currentState;
 unsigned long pressedTime = 0;
 unsigned long releasedTime = 0;
@@ -145,10 +145,10 @@ void setup() {
     delay(2000);
 
     currentState = digitalRead(D7);
-    if (currentState == HIGH) {
+    if (currentState == LOW) {
         updateOLED2("Entering", "Config Menu", "");
         delay(3000);
-        lastState = LOW;
+        lastState = HIGH;
         inConf();
     }
 
@@ -177,9 +177,9 @@ void inConf() {
     setConfig();
     currentState = digitalRead(D7);
 
-    if (lastState == LOW && currentState == HIGH) {
+    if (lastState == HIGH && currentState == LOW) {
         pressedTime = millis();
-    } else if (lastState == HIGH && currentState == LOW) {
+    } else if (lastState == LOW && currentState == HIGH) {
         releasedTime = millis();
         long pressDuration = releasedTime - pressedTime;
         if (pressDuration < 1000) {
@@ -188,7 +188,7 @@ void inConf() {
         }
     }
 
-    if (lastState == HIGH && currentState == HIGH) {
+    if (lastState == LOW && currentState == LOW) {
         long passedDuration = millis() - pressedTime;
         if (passedDuration > 4000) {
             // to do
